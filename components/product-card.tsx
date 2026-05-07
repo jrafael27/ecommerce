@@ -1,51 +1,68 @@
 import Image from "next/image";
-// import Stripe from "stripe";
 import type Stripe from "stripe";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import Link from "next/link";
 import { Button } from "./ui/button";
-
 
 interface Props {
   product: Stripe.Product;
 }
 
 export const ProductCard = ({ product }: Props) => {
-  const price = product.default_price as Stripe.Price;
+  // 🛡️ safety guard (IMPORTANT for SSR/Prerender)
+  if (!product) return null;
+
+  const price =
+    typeof product.default_price === "object"
+      ? product.default_price
+      : null;
 
   return (
-    <Link href={`/products/${product.id}`} className="block h-full">
-      <Card className="group hover:shadow-2xl transition duration-300 py-0 h-full flex flex-col">
-        {product.images && product.images[0] && (
+    <Card className="group hover:shadow-2xl transition duration-300 py-0 h-full flex flex-col">
+      
+      {/* IMAGE */}
+      <Link href={`/products/${product.id}`} className="block">
+        {product.images?.[0] && (
           <div className="relative h-60 w-full">
             <Image
-              alt={product.name}
+              alt={product.name || "Product"}
               src={product.images[0]}
-              objectFit="cover"
-              layout="fill"
-              className="group-hover:opacity-90 transition-opacity duration-300 ease-in-out"
+              fill
+              className="object-cover group-hover:opacity-90 transition-opacity duration-300 ease-in-out"
             />
           </div>
         )}
+      </Link>
 
-        <CardHeader className="p-4 flex flex-col flex-grow">
-          <CardTitle className="text-xl font-bold text-gray-800 uppercase px-4">{product.name}</CardTitle>
-          <CardContent className="p-4 flex flex-grow flex-col justify-between">
-            {product.description && (
-              <p className="text-gray-600 text-sm mb-2">
-                {product.description}
-              </p>
-            )}
-            {price && price.unit_amount && (
-              <p className="text-lg font-semibold text-gray-900 pb-4">
-                {" "}
-                Rp {(price.unit_amount / 100).toLocaleString("id-ID")}
-              </p>
-            )}
-            <Button className="mt-auto bg-black text-white hover:bg-neutral-600"> Details</Button>
-          </CardContent>
-        </CardHeader>
-      </Card>
-    </Link>
+      {/* TITLE */}
+      <CardHeader className="p-4">
+        <CardTitle className="text-xl font-bold text-gray-800 uppercase">
+          {product.name}
+        </CardTitle>
+      </CardHeader>
+
+      {/* CONTENT */}
+      <CardContent className="p-4 flex flex-col flex-grow justify-between">
+        
+        {product.description && (
+          <p className="text-gray-600 text-sm mb-2">
+            {product.description}
+          </p>
+        )}
+
+        {price?.unit_amount && (
+          <p className="text-lg font-semibold text-gray-900 pb-4">
+            Rp {(price.unit_amount / 100).toLocaleString("id-ID")}
+          </p>
+        )}
+
+        {/* BUTTON */}
+        <Button asChild className="mt-auto bg-black text-white hover:bg-neutral-600">
+          <Link href={`/products/${product.id}`}>
+            Details
+          </Link>
+        </Button>
+      </CardContent>
+    </Card>
   );
 };

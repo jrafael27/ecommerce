@@ -1,5 +1,5 @@
 "use server";
-import { stripe } from "@/lib/stripe";
+import { getStripe  } from "@/lib/stripe";
 import { CartItem } from "@/store/cart-store";
 import { redirect } from "next/navigation";
 
@@ -14,6 +14,8 @@ export const ChekoutAction = async (formData: FormData): Promise<void> => {
     },
     quantity: item.quantity,
   }));
+
+  const stripe = getStripe();
 
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ["card"],

@@ -1,6 +1,7 @@
 "use client";
 
-import Stripe from "stripe";
+// import Stripe from "stripe";
+import type Stripe from "stripe";
 import { Card, CardContent, CardTitle } from "./ui/card";
 import { useEffect, useState } from "react";
 import Image from "next/image";

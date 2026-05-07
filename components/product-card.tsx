@@ -1,5 +1,6 @@
 import Image from "next/image";
-import Stripe from "stripe";
+// import Stripe from "stripe";
+import type Stripe from "stripe";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import Link from "next/link";
 import { Button } from "./ui/button";

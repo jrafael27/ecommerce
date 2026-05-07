@@ -1,5 +1,5 @@
 import { ProductDetail } from "@/components/product-detail";
-import { stripe } from "@/lib/stripe";
+import { getStripe  } from "@/lib/stripe";
 
 export default async function ProductPage({
   params,
@@ -8,6 +8,7 @@ export default async function ProductPage({
 }) {
     const {id} = await params;
     // console.log("PARAMS:", params);
+    const stripe = getStripe();
   const product = await stripe.products.retrieve(id, {
     expand: ["default_price"],
   });

@@ -1,11 +1,12 @@
 import Image from "next/image";
 import styles from ".page.module.css";
-import { stripe } from "@/lib/stripe";
+import { getStripe  } from "@/lib/stripe";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Carousel } from "@/components/carousel";
 
 export default async function Home() {
+  const stripe = getStripe();
   const products = await stripe.products.list({
     expand: ["data.default_price"],
     limit: 5

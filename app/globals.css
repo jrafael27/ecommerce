@@ -4,6 +4,12 @@
 
 @custom-variant dark (&:is(.dark *));
 
+body{
+  color: var(--foreground);
+  background: var(--background);
+  font-family: "Poppins", sans-serif;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
